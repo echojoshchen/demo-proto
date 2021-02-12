@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message DemoContainer {
+    repeated DemoObject objects = 1;
+}
+
+message DemoObject {
+    string name = 1;
+    string type = 2;
+    int32 count = 3;
+}
+
+enum MyEnum {
+    DEFAULT = 0;
+    ENABLED = 1;
+}
