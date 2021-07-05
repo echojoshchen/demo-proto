@@ -11,31 +11,31 @@ interface IDemoApiService extends grpc.ServiceDefinition<grpc.UntypedServiceImpl
     doSomething: IDemoApiService_IDoSomething;
 }
 
-interface IDemoApiService_IDoSomething extends grpc.MethodDefinition<demo_pb.DemoObject, demo_pb.DemoObject> {
+interface IDemoApiService_IDoSomething extends grpc.MethodDefinition<demo_pb.DemoContainer, demo_pb.DemoContainer> {
     path: "/DemoApi/DoSomething";
     requestStream: false;
     responseStream: false;
-    requestSerialize: grpc.serialize<demo_pb.DemoObject>;
-    requestDeserialize: grpc.deserialize<demo_pb.DemoObject>;
-    responseSerialize: grpc.serialize<demo_pb.DemoObject>;
-    responseDeserialize: grpc.deserialize<demo_pb.DemoObject>;
+    requestSerialize: grpc.serialize<demo_pb.DemoContainer>;
+    requestDeserialize: grpc.deserialize<demo_pb.DemoContainer>;
+    responseSerialize: grpc.serialize<demo_pb.DemoContainer>;
+    responseDeserialize: grpc.deserialize<demo_pb.DemoContainer>;
 }
 
 export const DemoApiService: IDemoApiService;
 
 export interface IDemoApiServer extends grpc.UntypedServiceImplementation {
-    doSomething: grpc.handleUnaryCall<demo_pb.DemoObject, demo_pb.DemoObject>;
+    doSomething: grpc.handleUnaryCall<demo_pb.DemoContainer, demo_pb.DemoContainer>;
 }
 
 export interface IDemoApiClient {
-    doSomething(request: demo_pb.DemoObject, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoObject) => void): grpc.ClientUnaryCall;
-    doSomething(request: demo_pb.DemoObject, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoObject) => void): grpc.ClientUnaryCall;
-    doSomething(request: demo_pb.DemoObject, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoObject) => void): grpc.ClientUnaryCall;
+    doSomething(request: demo_pb.DemoContainer, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoContainer) => void): grpc.ClientUnaryCall;
+    doSomething(request: demo_pb.DemoContainer, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoContainer) => void): grpc.ClientUnaryCall;
+    doSomething(request: demo_pb.DemoContainer, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoContainer) => void): grpc.ClientUnaryCall;
 }
 
 export class DemoApiClient extends grpc.Client implements IDemoApiClient {
     constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
-    public doSomething(request: demo_pb.DemoObject, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoObject) => void): grpc.ClientUnaryCall;
-    public doSomething(request: demo_pb.DemoObject, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoObject) => void): grpc.ClientUnaryCall;
-    public doSomething(request: demo_pb.DemoObject, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoObject) => void): grpc.ClientUnaryCall;
+    public doSomething(request: demo_pb.DemoContainer, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoContainer) => void): grpc.ClientUnaryCall;
+    public doSomething(request: demo_pb.DemoContainer, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoContainer) => void): grpc.ClientUnaryCall;
+    public doSomething(request: demo_pb.DemoContainer, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: demo_pb.DemoContainer) => void): grpc.ClientUnaryCall;
 }

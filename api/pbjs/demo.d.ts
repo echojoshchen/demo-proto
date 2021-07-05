@@ -99,7 +99,7 @@ export interface IDemoObject {
     name?: (string|null);
 
     /** DemoObject type */
-    type?: (string|null);
+    type?: (MyType|null);
 
     /** DemoObject count */
     count?: (number|null);
@@ -121,7 +121,7 @@ export class DemoObject implements IDemoObject {
     public name: string;
 
     /** DemoObject type. */
-    public type: string;
+    public type: MyType;
 
     /** DemoObject count. */
     public count: number;
@@ -202,6 +202,9 @@ export interface IInfo {
 
     /** Info id */
     id?: (string|null);
+
+    /** Info time */
+    time?: (number|Long|null);
 }
 
 /** Represents an Info. */
@@ -215,6 +218,9 @@ export class Info implements IInfo {
 
     /** Info id. */
     public id: string;
+
+    /** Info time. */
+    public time: (number|Long);
 
     /**
      * Creates a new Info instance using the specified properties.
@@ -287,10 +293,11 @@ export class Info implements IInfo {
     public toJSON(): { [k: string]: any };
 }
 
-/** MyEnum enum. */
-export enum MyEnum {
+/** MyType enum. */
+export enum MyType {
     DEFAULT = 0,
-    ENABLED = 1
+    ENABLED = 1,
+    DISABLED = 2
 }
 
 /** Represents a DemoApi */
@@ -315,17 +322,17 @@ export class DemoApi extends $protobuf.rpc.Service {
 
     /**
      * Calls DoSomething.
-     * @param request DemoObject message or plain object
-     * @param callback Node-style callback called with the error, if any, and DemoObject
+     * @param request DemoContainer message or plain object
+     * @param callback Node-style callback called with the error, if any, and DemoContainer
      */
-    public doSomething(request: IDemoObject, callback: DemoApi.DoSomethingCallback): void;
+    public doSomething(request: IDemoContainer, callback: DemoApi.DoSomethingCallback): void;
 
     /**
      * Calls DoSomething.
-     * @param request DemoObject message or plain object
+     * @param request DemoContainer message or plain object
      * @returns Promise
      */
-    public doSomething(request: IDemoObject): Promise<DemoObject>;
+    public doSomething(request: IDemoContainer): Promise<DemoContainer>;
 }
 
 export namespace DemoApi {
@@ -333,7 +340,7 @@ export namespace DemoApi {
     /**
      * Callback as used by {@link DemoApi#doSomething}.
      * @param error Error, if any
-     * @param [response] DemoObject
+     * @param [response] DemoContainer
      */
-    type DoSomethingCallback = (error: (Error|null), response?: DemoObject) => void;
+    type DoSomethingCallback = (error: (Error|null), response?: DemoContainer) => void;
 }

@@ -7,19 +7,21 @@ message DemoContainer {
 message DemoObject {
     Info info = 1;
     string name = 2;
-    string type = 3;
+    MyType type = 3;
     int32 count = 4;
 }
 
 message Info {
     string id = 1;
+    uint64 time = 2;
 }
 
-enum MyEnum {
+enum MyType {
     DEFAULT = 0;
     ENABLED = 1;
+    DISABLED = 2;
 }
 
 service DemoApi {
-    rpc DoSomething(DemoObject) returns (DemoObject) {};
+    rpc DoSomething(DemoContainer) returns (DemoContainer) {};
 }

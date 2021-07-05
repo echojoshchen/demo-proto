@@ -225,7 +225,7 @@ $root.DemoObject = (function() {
      * @interface IDemoObject
      * @property {IInfo|null} [info] DemoObject info
      * @property {string|null} [name] DemoObject name
-     * @property {string|null} [type] DemoObject type
+     * @property {MyType|null} [type] DemoObject type
      * @property {number|null} [count] DemoObject count
      */
 
@@ -262,11 +262,11 @@ $root.DemoObject = (function() {
 
     /**
      * DemoObject type.
-     * @member {string} type
+     * @member {MyType} type
      * @memberof DemoObject
      * @instance
      */
-    DemoObject.prototype.type = "";
+    DemoObject.prototype.type = 0;
 
     /**
      * DemoObject count.
@@ -305,7 +305,7 @@ $root.DemoObject = (function() {
         if (message.name != null && Object.hasOwnProperty.call(message, "name"))
             writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
         if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-            writer.uint32(/* id 3, wireType 2 =*/26).string(message.type);
+            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.type);
         if (message.count != null && Object.hasOwnProperty.call(message, "count"))
             writer.uint32(/* id 4, wireType 0 =*/32).int32(message.count);
         return writer;
@@ -349,7 +349,7 @@ $root.DemoObject = (function() {
                 message.name = reader.string();
                 break;
             case 3:
-                message.type = reader.string();
+                message.type = reader.int32();
                 break;
             case 4:
                 message.count = reader.int32();
@@ -398,8 +398,14 @@ $root.DemoObject = (function() {
             if (!$util.isString(message.name))
                 return "name: string expected";
         if (message.type != null && message.hasOwnProperty("type"))
-            if (!$util.isString(message.type))
-                return "type: string expected";
+            switch (message.type) {
+            default:
+                return "type: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
+            }
         if (message.count != null && message.hasOwnProperty("count"))
             if (!$util.isInteger(message.count))
                 return "count: integer expected";
@@ -425,8 +431,20 @@ $root.DemoObject = (function() {
         }
         if (object.name != null)
             message.name = String(object.name);
-        if (object.type != null)
-            message.type = String(object.type);
+        switch (object.type) {
+        case "DEFAULT":
+        case 0:
+            message.type = 0;
+            break;
+        case "ENABLED":
+        case 1:
+            message.type = 1;
+            break;
+        case "DISABLED":
+        case 2:
+            message.type = 2;
+            break;
+        }
         if (object.count != null)
             message.count = object.count | 0;
         return message;
@@ -448,7 +466,7 @@ $root.DemoObject = (function() {
         if (options.defaults) {
             object.info = null;
             object.name = "";
-            object.type = "";
+            object.type = options.enums === String ? "DEFAULT" : 0;
             object.count = 0;
         }
         if (message.info != null && message.hasOwnProperty("info"))
@@ -456,7 +474,7 @@ $root.DemoObject = (function() {
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
         if (message.type != null && message.hasOwnProperty("type"))
-            object.type = message.type;
+            object.type = options.enums === String ? $root.MyType[message.type] : message.type;
         if (message.count != null && message.hasOwnProperty("count"))
             object.count = message.count;
         return object;
@@ -483,6 +501,7 @@ $root.Info = (function() {
      * @exports IInfo
      * @interface IInfo
      * @property {string|null} [id] Info id
+     * @property {number|Long|null} [time] Info time
      */
 
     /**
@@ -507,6 +526,14 @@ $root.Info = (function() {
      * @instance
      */
     Info.prototype.id = "";
+
+    /**
+     * Info time.
+     * @member {number|Long} time
+     * @memberof Info
+     * @instance
+     */
+    Info.prototype.time = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
     /**
      * Creates a new Info instance using the specified properties.
@@ -534,6 +561,8 @@ $root.Info = (function() {
             writer = $Writer.create();
         if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+        if (message.time != null && Object.hasOwnProperty.call(message, "time"))
+            writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.time);
         return writer;
     };
 
@@ -570,6 +599,9 @@ $root.Info = (function() {
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.string();
+                break;
+            case 2:
+                message.time = reader.uint64();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -609,6 +641,9 @@ $root.Info = (function() {
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isString(message.id))
                 return "id: string expected";
+        if (message.time != null && message.hasOwnProperty("time"))
+            if (!$util.isInteger(message.time) && !(message.time && $util.isInteger(message.time.low) && $util.isInteger(message.time.high)))
+                return "time: integer|Long expected";
         return null;
     };
 
@@ -626,6 +661,15 @@ $root.Info = (function() {
         var message = new $root.Info();
         if (object.id != null)
             message.id = String(object.id);
+        if (object.time != null)
+            if ($util.Long)
+                (message.time = $util.Long.fromValue(object.time)).unsigned = true;
+            else if (typeof object.time === "string")
+                message.time = parseInt(object.time, 10);
+            else if (typeof object.time === "number")
+                message.time = object.time;
+            else if (typeof object.time === "object")
+                message.time = new $util.LongBits(object.time.low >>> 0, object.time.high >>> 0).toNumber(true);
         return message;
     };
 
@@ -642,10 +686,21 @@ $root.Info = (function() {
         if (!options)
             options = {};
         var object = {};
-        if (options.defaults)
+        if (options.defaults) {
             object.id = "";
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, true);
+                object.time = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.time = options.longs === String ? "0" : 0;
+        }
         if (message.id != null && message.hasOwnProperty("id"))
             object.id = message.id;
+        if (message.time != null && message.hasOwnProperty("time"))
+            if (typeof message.time === "number")
+                object.time = options.longs === String ? String(message.time) : message.time;
+            else
+                object.time = options.longs === String ? $util.Long.prototype.toString.call(message.time) : options.longs === Number ? new $util.LongBits(message.time.low >>> 0, message.time.high >>> 0).toNumber(true) : message.time;
         return object;
     };
 
@@ -664,16 +719,18 @@ $root.Info = (function() {
 })();
 
 /**
- * MyEnum enum.
- * @exports MyEnum
+ * MyType enum.
+ * @exports MyType
  * @enum {number}
  * @property {number} DEFAULT=0 DEFAULT value
  * @property {number} ENABLED=1 ENABLED value
+ * @property {number} DISABLED=2 DISABLED value
  */
-$root.MyEnum = (function() {
+$root.MyType = (function() {
     var valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "DEFAULT"] = 0;
     values[valuesById[1] = "ENABLED"] = 1;
+    values[valuesById[2] = "DISABLED"] = 2;
     return values;
 })();
 
@@ -715,7 +772,7 @@ $root.DemoApi = (function() {
      * @typedef DoSomethingCallback
      * @type {function}
      * @param {Error|null} error Error, if any
-     * @param {DemoObject} [response] DemoObject
+     * @param {DemoContainer} [response] DemoContainer
      */
 
     /**
@@ -723,13 +780,13 @@ $root.DemoApi = (function() {
      * @function doSomething
      * @memberof DemoApi
      * @instance
-     * @param {IDemoObject} request DemoObject message or plain object
-     * @param {DemoApi.DoSomethingCallback} callback Node-style callback called with the error, if any, and DemoObject
+     * @param {IDemoContainer} request DemoContainer message or plain object
+     * @param {DemoApi.DoSomethingCallback} callback Node-style callback called with the error, if any, and DemoContainer
      * @returns {undefined}
      * @variation 1
      */
     Object.defineProperty(DemoApi.prototype.doSomething = function doSomething(request, callback) {
-        return this.rpcCall(doSomething, $root.DemoObject, $root.DemoObject, request, callback);
+        return this.rpcCall(doSomething, $root.DemoContainer, $root.DemoContainer, request, callback);
     }, "name", { value: "DoSomething" });
 
     /**
@@ -737,8 +794,8 @@ $root.DemoApi = (function() {
      * @function doSomething
      * @memberof DemoApi
      * @instance
-     * @param {IDemoObject} request DemoObject message or plain object
-     * @returns {Promise<DemoObject>} Promise
+     * @param {IDemoContainer} request DemoContainer message or plain object
+     * @returns {Promise<DemoContainer>} Promise
      * @variation 2
      */
 

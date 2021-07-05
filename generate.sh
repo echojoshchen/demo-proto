@@ -21,3 +21,12 @@ pbjs \
     -o ${PROTO_DEST}/demo.js \
     proto/demo.proto
 pbts -o ${PROTO_DEST}/demo.d.ts ${PROTO_DEST}/demo.js
+
+# proto-loader
+PROTO_DEST=./api/proto-loader
+mkdir -p $PROTO_DEST
+proto-loader-gen-types \
+    --longs=Number \
+    --grpcLib=@grpc/grpc-js \
+    --outDir=${PROTO_DEST} \
+    proto/demo.proto

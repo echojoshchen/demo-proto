@@ -36,8 +36,8 @@ export class DemoObject extends jspb.Message {
     setInfo(value?: Info): DemoObject;
     getName(): string;
     setName(value: string): DemoObject;
-    getType(): string;
-    setType(value: string): DemoObject;
+    getType(): MyType;
+    setType(value: MyType): DemoObject;
     getCount(): number;
     setCount(value: number): DemoObject;
 
@@ -55,7 +55,7 @@ export namespace DemoObject {
     export type AsObject = {
         info?: Info.AsObject,
         name: string,
-        type: string,
+        type: MyType,
         count: number,
     }
 }
@@ -63,6 +63,8 @@ export namespace DemoObject {
 export class Info extends jspb.Message { 
     getId(): string;
     setId(value: string): Info;
+    getTime(): number;
+    setTime(value: number): Info;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Info.AsObject;
@@ -77,10 +79,12 @@ export class Info extends jspb.Message {
 export namespace Info {
     export type AsObject = {
         id: string,
+        time: number,
     }
 }
 
-export enum MyEnum {
+export enum MyType {
     DEFAULT = 0,
     ENABLED = 1,
+    DISABLED = 2,
 }
