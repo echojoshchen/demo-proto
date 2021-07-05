@@ -11,6 +11,7 @@
     "database:loader": "ts-node src/database-loader.ts",
     "server:ts": "ts-node src/server-ts.ts",
     "server:google": "ts-node src/server-google.ts",
+    "server:loader-google": "ts-node src/server-loader-google.ts",
     "server:loader": "ts-node src/server-loader.ts"
   },
   "author": "",

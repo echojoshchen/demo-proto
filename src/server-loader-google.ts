@@ -1,5 +1,5 @@
 /**
- * Demo of a server with @grpc/proto-loader.
+ * Demo of a server with @grpc/proto-loader server and @grpc-js client.
  */
 import path from "path";
 import * as grpc from "@grpc/grpc-js";
@@ -9,8 +9,9 @@ import { ProtoGrpcType } from "../api/proto-loader/demo";
 import { DemoApiHandlers } from "../api/proto-loader/DemoApi";
 import { DemoContainer } from "../api/proto-loader/DemoContainer";
 import { DemoObject } from "../api/proto-loader/DemoObject";
-import { Info } from "../api/proto-loader/Info";
 import { MyType } from "../api/proto-loader/MyType";
+import * as demoPb from "../api/grpcjs/demo_pb";
+import * as demoGrpcPb from "../api/grpcjs/demo_grpc_pb";
 import { DbEntry } from "../interfaces/database";
 import wrapServerWithReflection from "grpc-node-server-reflection";
 
@@ -87,42 +88,38 @@ export default async function initServer(port: number): Promise<any> {
 
 initServer(9876).then(async (server: grpc.Server) => {
     // Set data fields
-    const info: Info = {
-        id: "1234",
-        time: Date.now(),
-    };
-    const demoObj: DemoObject = {
-        info,
-        name: "Test Object",
-        type: MyType.ENABLED,
-        count: 100,
-    };
-    const container: DemoContainer = {
-        objects: [demoObj],
-    }
+    const info = new demoPb.Info();
+    info.setId("1234");
+    info.setTime(Date.now());
+    const demoObj = new demoPb.DemoObject()
+    demoObj.setInfo(info);
+    demoObj.setName("Test Object");
+    demoObj.setType(demoPb.MyType.ENABLED);
+    demoObj.setCount(100);
+    const container = new demoPb.DemoContainer();
+    container.setObjectsList([demoObj]);
 
-    const client = new packageObject.DemoApi("localhost:9876", grpc.credentials.createInsecure());
-    const readData = await new Promise<DemoContainer>((resolve) => {
+    const client = new demoGrpcPb.DemoApiClient("localhost:9876", grpc.credentials.createInsecure());
+    const readData = await new Promise<demoPb.DemoContainer>((resolve) => {
         client.doSomething(container, (err, response) => {
-            resolve(response || {} as DemoContainer)
+            resolve(response)
         });
     });
 
     // Human readable strings
-    const MyTypeToString: Record<MyType|string, string | undefined> = {
-        [MyType.DEFAULT]: undefined,
-        [MyType.DISABLED]: "Disabled",
-        [MyType.ENABLED]: "Enabled",
+    const MyTypeToString: Record<demoPb.MyType, string | undefined> = {
+        [demoPb.MyType.DEFAULT]: undefined,
+        [demoPb.MyType.DISABLED]: "Disabled",
+        [demoPb.MyType.ENABLED]: "Enabled",
     };
-    readData.objects?.forEach((obj, index) => {
+    readData.getObjectsList().forEach((obj, index) => {
         console.log("Object:", index);
-        console.log("Info:", obj.info?.id);
-        console.log("Time:", obj.info?.time?.toString());
-        console.log("Name:", obj.name);
-        console.log("Type:", MyTypeToString[obj.type || MyType.DEFAULT]);
-        console.log("Count:", obj.count);
+        console.log("Info:", obj.getInfo()?.getId());
+        console.log("Time:", obj.getInfo()?.getTime());
+        console.log("Name:", obj.getName());
+        console.log("Type:", MyTypeToString[obj.getType()]);
+        console.log("Count:", obj.getCount());
     });
 
-    // Remove this line to leave the server open
     server.forceShutdown();
 });

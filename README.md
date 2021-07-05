@@ -11,16 +11,17 @@ deserialize it, and then print the output.
 
 Options:
 
-| Script | Description |
-| ---- | ---- |
-| `database:ts` | A native TypeScript implementation of mock database interactions. |
-| `database:google` | A `google-protobuf` implementation of mock database interactions. |
-| `database:pbjs` | A `Protobuf.js` implementation of mock database interactions. |
-| `database:loader` | A `proto-loader-gen-types` implementation of mock database interactions. |
-| `server:ts` | A native TypeScript implementation of a gRPC service. |
-| `server:google` | A `google-protobuf` and `@grpc/grpc-js` implementation of a gRPC service. |
-| `server:loader` | A `@grpc/proto-loader` implementation of a gRPC service. |
-| `proto` | Regenerate the libraries with `google-protobuf` and `pbjs`. |
+| Script                 | Description                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `database:ts`          | A native TypeScript implementation of mock database interactions.                                            |
+| `database:google`      | A `google-protobuf` implementation of mock database interactions.                                            |
+| `database:pbjs`        | A `Protobuf.js` implementation of mock database interactions.                                                |
+| `database:loader`      | A `proto-loader-gen-types` implementation of mock database interactions.                                     |
+| `server:ts`            | A native TypeScript implementation of a gRPC service.                                                        |
+| `server:google`        | A `google-protobuf` and `@grpc/grpc-js` implementation of a gRPC service.                                    |
+| `server:loader`        | A `@grpc/proto-loader` implementation of a gRPC service.                                                     |
+| `server:loader-google` | A `@grpc/proto-loader` implementation of a gRPC server, with a `google-protobuf` and `@grpc/grpc-js` client. |
+| `proto`                | Regenerate the libraries with `google-protobuf` and `pbjs`.                                                  |
 
 ```bash
 npm run database:ts;
