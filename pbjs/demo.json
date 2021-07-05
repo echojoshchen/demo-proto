@@ -1,0 +1,47 @@
+{
+  "nested": {
+    "DemoContainer": {
+      "fields": {
+        "objects": {
+          "rule": "repeated",
+          "type": "DemoObject",
+          "id": 1
+        }
+      }
+    },
+    "DemoObject": {
+      "fields": {
+        "info": {
+          "type": "Info",
+          "id": 1
+        },
+        "name": {
+          "type": "string",
+          "id": 2
+        },
+        "type": {
+          "type": "string",
+          "id": 3
+        },
+        "count": {
+          "type": "int32",
+          "id": 4
+        }
+      }
+    },
+    "Info": {
+      "fields": {
+        "id": {
+          "type": "string",
+          "id": 1
+        }
+      }
+    },
+    "MyEnum": {
+      "values": {
+        "DEFAULT": 0,
+        "ENABLED": 1
+      }
+    }
+  }
+}

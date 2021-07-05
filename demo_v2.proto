@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package v2;
+
 message DemoContainer {
     repeated DemoObject objects = 1;
 }
@@ -12,7 +14,7 @@ message DemoObject {
 }
 
 message Info {
-    string id = 1;
+    int32 id = 1;
 }
 
 enum MyEnum {
