@@ -1,25 +1,25 @@
 /**
- * Demo of writing and reading objects from a database with Protobuf.js.
+ * Demo of writing and reading objects from a database with proto-loader-gen-types.
  */
 
-// Import contains "google-protobuf", which uses eval()
-import {
-    DemoContainer, DemoObject, IDemoObject, Info, MyType
-} from "../api/pbjs/demo";
+import { DemoContainer } from "../api/proto-loader/DemoContainer";
+import { DemoObject } from "../api/proto-loader/DemoObject";
+import { Info } from "../api/proto-loader/Info";
+import { MyType } from "../api/proto-loader/MyType";
 import { DbEntry } from "./dbInterface";
 
-function serializeDbFormat(data: IDemoObject): DbEntry {
+function serializeDbFormat(data: DemoObject): DbEntry {
     return {
         infoId: data.info?.id || "",
         infoTime: Number(data.info?.time),
         name: data.name || "",
-        type: MyType[data.type || 0],
+        type: (MyType as any)[data.type as MyType],
         count: data.count || 0,
     }
 }
 
 function deserializeDbFormat(data: DbEntry): DemoObject {
-    return DemoObject.fromObject({
+    return {
         info: {
             id: data.infoId,
             time: data.infoTime,
@@ -27,27 +27,27 @@ function deserializeDbFormat(data: DbEntry): DemoObject {
         name: data.name,
         type: (MyType as any)[data.type] as MyType,
         count: data.count,
-    });
+    };
 }
 
 // Set data fields
-const info = Info.fromObject({
+const info: Info = {
     id: "1234",
     time: Date.now(),
-});
-const demoObj = DemoObject.fromObject({
+};
+const demoObj: DemoObject = {
     info,
     name: "Test Object",
     type: MyType.ENABLED,
     count: 100,
-});
-const container = DemoContainer.fromObject({
+};
+const container: DemoContainer = {
     objects: [demoObj],
-});
+}
 
 // Write to database
 const mockDb: {[key: string]: DbEntry} = {};
-container.objects.forEach((obj) => {
+container.objects?.forEach((obj) => {
     mockDb[obj.info?.id || ""] = serializeDbFormat(obj);
 })
 
@@ -65,8 +65,8 @@ const MyTypeToString: Record<MyType, string | undefined> = {
 readData.forEach((obj, index) => {
     console.log("Object:", index);
     console.log("Info:", obj.info?.id);
-    console.log("Time:", obj.info?.time.toString());
+    console.log("Time:", obj.info?.time);
     console.log("Name:", obj.name);
-    console.log("Type:", MyTypeToString[obj.type]);
+    console.log("Type:", MyTypeToString[obj.type as MyType]);
     console.log("Count:", obj.count);
 });

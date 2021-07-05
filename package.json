@@ -8,8 +8,10 @@
     "database:ts": "ts-node src/database-ts.ts",
     "database:google": "ts-node src/database-google.ts",
     "database:pbjs": "ts-node src/database-pbjs.ts",
+    "database:loader": "ts-node src/database-loader.ts",
     "server:ts": "ts-node src/server-ts.ts",
-    "server:google": "ts-node src/server-google.ts"
+    "server:google": "ts-node src/server-google.ts",
+    "server:loader": "ts-node src/server-loader.ts"
   },
   "author": "",
   "license": "ISC",
