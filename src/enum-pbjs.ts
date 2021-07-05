@@ -10,7 +10,6 @@ const valString = MyType[val];
 val = (MyType as any)[valString];
 
 // Enum to list of strings
-console.log(JSON.stringify(MyType));
 const stringList = Object.keys(MyType).filter((key) => typeof key === "string");
 console.log("Enum as list of strings", stringList);
 
