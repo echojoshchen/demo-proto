@@ -10,7 +10,7 @@ import {
 import {
     DemoApiClient, DemoApiService, IDemoApiServer
 } from "../api/grpcjs/demo_grpc_pb";
-import { DbEntry } from "./dbInterface";
+import { DbEntry } from "../interfaces/database";
 
 // Add reverse mappings for enums
 Object.entries(MyType).forEach(([key, value]) => {

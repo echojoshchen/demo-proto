@@ -6,7 +6,7 @@
 import {
     DemoContainer, DemoObject, Info, MyType
 } from "../api/grpcjs/demo_pb";
-import { DbEntry } from "./dbInterface";
+import { DbEntry } from "../interfaces/database";
 
 // Add reverse mappings for enums
 Object.entries(MyType).forEach(([key, value]) => {

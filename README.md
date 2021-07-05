@@ -22,6 +22,16 @@ Options:
 | `server:loader` | A `@grpc/proto-loader` implementation of a gRPC service. |
 | `proto` | Regenerate the libraries with `google-protobuf` and `pbjs`. |
 
+```bash
+npm run database:ts;
+npm run database:google;
+npm run database:pbjs;
+npm run database:loader;
+npm run server:ts;
+npm run server:google;
+npm run server:loader;
+```
+
 ## Reflection
 
 The `server:loader` version implements server reflection. One way to use this is to remove the line

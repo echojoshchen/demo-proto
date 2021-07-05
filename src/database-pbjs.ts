@@ -6,7 +6,7 @@
 import {
     DemoContainer, DemoObject, IDemoObject, Info, MyType
 } from "../api/pbjs/demo";
-import { DbEntry } from "./dbInterface";
+import { DbEntry } from "../interfaces/database";
 
 function serializeDbFormat(data: IDemoObject): DbEntry {
     return {

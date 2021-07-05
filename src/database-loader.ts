@@ -6,7 +6,7 @@ import { DemoContainer } from "../api/proto-loader/DemoContainer";
 import { DemoObject } from "../api/proto-loader/DemoObject";
 import { Info } from "../api/proto-loader/Info";
 import { MyType } from "../api/proto-loader/MyType";
-import { DbEntry } from "./dbInterface";
+import { DbEntry } from "../interfaces/database";
 
 function serializeDbFormat(data: DemoObject): DbEntry {
     return {

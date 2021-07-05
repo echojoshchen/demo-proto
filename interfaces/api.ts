@@ -1,3 +1,5 @@
+// Native TypeScript implementation
+
 export interface DemoContainer {
     objects: DemoObject[];
 }

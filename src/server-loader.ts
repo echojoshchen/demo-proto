@@ -11,7 +11,7 @@ import { DemoContainer } from "../api/proto-loader/DemoContainer";
 import { DemoObject } from "../api/proto-loader/DemoObject";
 import { Info } from "../api/proto-loader/Info";
 import { MyType } from "../api/proto-loader/MyType";
-import { DbEntry } from "./dbInterface";
+import { DbEntry } from "../interfaces/database";
 import wrapServerWithReflection from "grpc-node-server-reflection";
 
 function serializeDbFormat(data: DemoObject): DbEntry {
@@ -123,4 +123,5 @@ initServer(9876).then(async (server: grpc.Server) => {
     });
 
     // Remove this line to leave the server open
+    server.forceShutdown();
 });

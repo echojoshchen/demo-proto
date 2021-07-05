@@ -4,8 +4,8 @@
 
 import {
     DemoContainer, DemoObject, Info, MyType
-} from "./interface";
-import { DbEntry } from "./dbInterface";
+} from "../interfaces/api";
+import { DbEntry } from "../interfaces/database";
 
 // Typescript can define enums with strings, eliminates step to convert from enum to readable string
 export enum MyStringType {
