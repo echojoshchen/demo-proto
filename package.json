@@ -5,6 +5,10 @@
   "main": "demo.js",
   "scripts": {
     "proto": "sh generate.sh",
+    "enum:ts": "ts-node src/enum-ts.ts",
+    "enum:google": "ts-node src/enum-google.ts",
+    "enum:pbjs": "ts-node src/enum-pbjs.ts",
+    "enum:loader": "ts-node src/enum-loader.ts",
     "database:ts": "ts-node src/database-ts.ts",
     "database:google": "ts-node src/database-google.ts",
     "database:pbjs": "ts-node src/database-pbjs.ts",

@@ -21,6 +21,10 @@ Options:
 | `server:google`        | A `google-protobuf` and `@grpc/grpc-js` implementation of a gRPC service.                                    |
 | `server:loader`        | A `@grpc/proto-loader` implementation of a gRPC service.                                                     |
 | `server:loader-google` | A `@grpc/proto-loader` implementation of a gRPC server, with a `google-protobuf` and `@grpc/grpc-js` client. |
+| `enum:ts`              | A native TypeScript implementation of enum to string conversion.                                             |
+| `enum:google`          | A `google-protobuf` implementation of enum to string conversion.                                             |
+| `enum:pbjs`            | A `Protobuf.js` implementation of enum to string conversion.                                                 |
+| `enum:loader`          | A `proto-loader-gen-types` implementation of enum to string conversion.                                      |
 | `proto`                | Regenerate the libraries with `google-protobuf` and `pbjs`.                                                  |
 
 ```bash
@@ -28,6 +32,10 @@ npm run database:ts;
 npm run database:google;
 npm run database:pbjs;
 npm run database:loader;
+npm run enum:ts;
+npm run enum:google;
+npm run enum:pbjs;
+npm run enum:loader;
 npm run server:ts;
 npm run server:google;
 npm run server:loader;
