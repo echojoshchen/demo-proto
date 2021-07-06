@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/express": "^4.17.12",
+    "@types/express": "4.17.13",
     "@types/google-protobuf": "^3.15.2",
     "grpc-tools": "^1.11.1",
     "grpc_tools_node_protoc_ts": "^5.2.2",
