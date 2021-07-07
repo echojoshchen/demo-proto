@@ -3,6 +3,7 @@
  */
 
 import * as grpc from "@grpc/grpc-js";
+import { createLightship } from 'lightship';
 
 import {
     DemoContainer, DemoObject, Info, MyType
@@ -112,5 +113,13 @@ initServer(9876).then(async (server: grpc.Server) => {
         console.log("Count:", obj.getCount());
     });
 
-    server.forceShutdown();
+    if (process.env.SHUTDOWN) {
+        server.forceShutdown();
+    } else {
+        const lightship = createLightship({
+            detectKubernetes: false,
+        });
+        lightship.signalReady();
+        console.log('ready');
+    }
 });

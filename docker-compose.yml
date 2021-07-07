@@ -1,0 +1,43 @@
+version: "2"                                                                                                                                                                                                                                                                                                                                                              
+services:
+  server:
+    image: node:14
+    command: >
+      /bin/sh -c '
+      npm install &&
+      npm run server:google-persistent
+      '
+    working_dir: /app
+    volumes:
+      - .:/app  # Mount local source from the host machine (the dev workstation) into the container
+      - /app/dist  # but override the dist directory (don't pick up files from the host machine)
+      - /app/node_modules  # also override node_modules (don't pick up files from the host machine)
+    ports:
+    - "9876:9876"
+    expose:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+
+  grpcui:
+    image: fullstorydev/grpcui:v1.1.0
+    working_dir: /app
+    entrypoint:
+      - grpcui
+      - -plaintext
+      - -bind=0.0.0.0
+      - -port=8080
+      - -proto=demo.proto
+      - -import-path=/app/proto
+      - server:9876
+    volumes_from:
+      - server  # Share filesystems with the server container
+    depends_on:
+      server:
+        condition: service_healthy
+    links: 
+      - server
+    ports:
+      - "8080:8080"

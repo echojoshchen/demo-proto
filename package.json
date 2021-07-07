@@ -14,9 +14,11 @@
     "database:pbjs": "ts-node src/database-pbjs.ts",
     "database:loader": "ts-node src/database-loader.ts",
     "server:ts": "ts-node src/server-ts.ts",
-    "server:google": "ts-node src/server-google.ts",
+    "server:google": "SHUTDOWN=1 ts-node src/server-google.ts",
+    "server:google-persistent": "ts-node src/server-google.ts",
     "server:loader-google": "ts-node src/server-loader-google.ts",
-    "server:loader": "ts-node src/server-loader.ts"
+    "server:loader": "SHUTDOWN=1 ts-node src/server-loader.ts",
+    "server:loader-persistent": "ts-node src/server-loader.ts"
   },
   "author": "",
   "license": "ISC",
@@ -35,6 +37,7 @@
     "google-protobuf": "^3.17.1",
     "got": "^11.8.2",
     "grpc-node-server-reflection": "^1.0.2",
+    "lightship": "^6.7.2",
     "protobufjs": "^6.11.2"
   }
 }

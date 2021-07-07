@@ -4,6 +4,7 @@
 import path from "path";
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from '@grpc/proto-loader';
+import { createLightship } from 'lightship';
 
 import { ProtoGrpcType } from "../api/proto-loader/demo";
 import { DemoApiHandlers } from "../api/proto-loader/DemoApi";
@@ -123,6 +124,12 @@ initServer(9876).then(async (server: grpc.Server) => {
         console.log("Count:", obj.count);
     });
 
-    // Remove this line to leave the server open
-    server.forceShutdown();
+    if (process.env.SHUTDOWN) {
+        server.forceShutdown();
+    } else {
+        const lightship = createLightship({
+            detectKubernetes: false,
+        });
+        lightship.signalReady();
+    }
 });
