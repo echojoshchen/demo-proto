@@ -22,7 +22,7 @@ services:
       retries: 10
 
   grpcui:
-    image: fullstorydev/grpcui:v1.1.0
+    image: fullstorydev/grpcui:v1.2.0
     working_dir: /app
     entrypoint:
       - grpcui
