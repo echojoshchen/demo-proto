@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+message DemoContainer {
+    repeated DemoObject objects = 1;
+}
+
+message DemoObject {
+    Info info = 1;
+    string name = 2;
+    MyType type = 3;
+    int32 count = 4;
+}
+
+message Info {
+    string id = 1;
+    uint64 time = 2;
+}
+
+enum MyType {
+    DEFAULT = 0;
+    ENABLED = 1;
+    DISABLED = 2;
+}
+
+service DemoApi {
+    rpc DoSomething(DemoContainer) returns (DemoContainer) {};
+}
