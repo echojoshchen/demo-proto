@@ -21,7 +21,7 @@ services:
       retries: 10
 
   grpcui:
-    image: golang:1.16-alpine
+    image: golang:1.17-alpine
     working_dir: /app
     command: >
       /bin/sh -c '
