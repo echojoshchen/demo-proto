@@ -14,9 +14,10 @@
     "database:pbjs": "ts-node src/database-pbjs.ts",
     "database:loader": "ts-node src/database-loader.ts",
     "server:ts": "ts-node src/server-ts.ts",
-    "server:google": "SHUTDOWN=1 ts-node src/server-google.ts",
-    "server:google-persistent": "ts-node src/server-google.ts",
-    "server:loader-google": "ts-node src/server-loader-google.ts",
+    "server:grpc": "ts-node src/server-grpc.ts",
+    "server:grpcjs": "SHUTDOWN=1 ts-node src/server-grpcjs.ts",
+    "server:grpcjs-persistent": "ts-node src/server-grpcjs.ts",
+    "server:loader-grpcjs": "ts-node src/server-loader-grpcjs.ts",
     "server:loader": "SHUTDOWN=1 ts-node src/server-loader.ts",
     "server:loader-persistent": "ts-node src/server-loader.ts"
   },
@@ -36,6 +37,7 @@
     "express": "^4.17.1",
     "google-protobuf": "^3.17.1",
     "got": "^11.8.2",
+    "grpc": "^1.24.11",
     "grpc-node-server-reflection": "^1.0.2",
     "lightship": "^6.7.2",
     "protobufjs": "^6.11.2"
