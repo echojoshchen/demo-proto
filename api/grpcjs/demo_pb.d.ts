@@ -40,6 +40,8 @@ export class DemoObject extends jspb.Message {
     setType(value: MyType): DemoObject;
     getCount(): number;
     setCount(value: number): DemoObject;
+    getLongFieldName(): string;
+    setLongFieldName(value: string): DemoObject;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DemoObject.AsObject;
@@ -57,6 +59,7 @@ export namespace DemoObject {
         name: string,
         type: MyType,
         count: number,
+        longFieldName: string,
     }
 }
 

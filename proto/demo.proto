@@ -9,6 +9,7 @@ message DemoObject {
     string name = 2;
     MyType type = 3;
     int32 count = 4;
+    string long_field_name = 5;
 }
 
 message Info {

@@ -8,6 +8,7 @@ export interface DemoObject {
   'name'?: (string);
   'type'?: (_MyType | keyof typeof _MyType);
   'count'?: (number);
+  'longFieldName'?: (string);
 }
 
 export interface DemoObject__Output {
@@ -15,4 +16,5 @@ export interface DemoObject__Output {
   'name'?: (string);
   'type'?: (_MyType);
   'count'?: (number);
+  'longFieldName'?: (string);
 }

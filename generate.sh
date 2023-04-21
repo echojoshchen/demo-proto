@@ -1,16 +1,5 @@
 #!/usr/bin/env bash
 
-# grpc
-PROTO_DEST=./api/grpc
-mkdir -p $PROTO_DEST
-
-grpc_tools_node_protoc \
-    --proto_path ./proto \
-    --js_out=import_style=commonjs,binary:${PROTO_DEST} \
-    --grpc_out=grpc:${PROTO_DEST} \
-    --ts_out=grpc:${PROTO_DEST} \
-    ./proto/*.proto \
-
 # grpc-js
 PROTO_DEST=./api/grpcjs
 mkdir -p $PROTO_DEST
