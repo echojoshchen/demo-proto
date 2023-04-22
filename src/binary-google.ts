@@ -1,5 +1,5 @@
 /**
- * Demo of writing and reading objects from a database with google-protobuf.
+ * Demo of writing and reading objects to binary format with google-protobuf.
  */
 
 // Import contains "google-protobuf", which uses eval()

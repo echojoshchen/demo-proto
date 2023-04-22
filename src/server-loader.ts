@@ -7,11 +7,11 @@ import * as protoLoader from '@grpc/proto-loader';
 import { createLightship } from 'lightship';
 
 import { ProtoGrpcType } from "../api/proto-loader/demo";
-import { DemoApiHandlers } from "../api/proto-loader/DemoApi";
-import { DemoContainer } from "../api/proto-loader/DemoContainer";
-import { DemoObject } from "../api/proto-loader/DemoObject";
-import { Info } from "../api/proto-loader/Info";
-import { MyType } from "../api/proto-loader/MyType";
+import { DemoApiHandlers } from "../api/proto-loader/org/demo/DemoApi";
+import { DemoContainer } from "../api/proto-loader/org/demo/DemoContainer";
+import { DemoObject } from "../api/proto-loader/org/demo/DemoObject";
+import { Info } from "../api/proto-loader/org/demo/Info";
+import { MyType } from "../api/proto-loader/org/demo/MyType";
 import { DbEntry } from "../interfaces/database";
 import wrapServerWithReflection from "grpc-node-server-reflection";
 
@@ -69,7 +69,7 @@ const packageObject = (grpc.loadPackageDefinition(
 export default async function initServer(port: number): Promise<any> {
     return new Promise((resolve, reject) => {
         const demoService =
-            packageObject.DemoApi.service;
+            packageObject.org.demo.DemoApi.service;
 
         // This wraps the instance of gRPC server with the Server Reflection service and returns it.
         const server = wrapServerWithReflection(new grpc.Server());
@@ -102,7 +102,7 @@ initServer(9876).then(async (server: grpc.Server) => {
         objects: [demoObj],
     }
 
-    const client = new packageObject.DemoApi("localhost:9876", grpc.credentials.createInsecure());
+    const client = new packageObject.org.demo.DemoApi("localhost:9876", grpc.credentials.createInsecure());
     const readData = await new Promise<DemoContainer>((resolve) => {
         client.doSomething(container, (err, response) => {
             resolve(response || {} as DemoContainer)
@@ -127,7 +127,7 @@ initServer(9876).then(async (server: grpc.Server) => {
     if (process.env.SHUTDOWN) {
         server.forceShutdown();
     } else {
-        const lightship = createLightship({
+        const lightship = await createLightship({
             detectKubernetes: false,
         });
         lightship.signalReady();

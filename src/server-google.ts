@@ -116,7 +116,7 @@ initServer(9876).then(async (server: grpc.Server) => {
     if (process.env.SHUTDOWN) {
         server.forceShutdown();
     } else {
-        const lightship = createLightship({
+        const lightship = await createLightship({
             detectKubernetes: false,
         });
         lightship.signalReady();

@@ -2,7 +2,8 @@
  * Demo of serializing an enum to strings.
  */
 
-import { MyType } from "../api/pbjs/demo";
+import { org } from "../api/pbjs/demo";
+const MyType = org.demo.MyType;
 
 // Single enum to string and back
 let val = MyType.ENABLED;
@@ -14,7 +15,7 @@ const stringList = Object.keys(MyType).filter((key) => typeof key === "string");
 console.log("Enum as list of strings", stringList);
 
 // Enum to human readable string
-const MyTypeToString: Record<MyType, string | undefined> = {
+const MyTypeToString: Record<org.demo.MyType, string | undefined> = {
     [MyType.DEFAULT]: undefined,
     [MyType.DISABLED]: "Disabled",
     [MyType.ENABLED]: "Enabled",

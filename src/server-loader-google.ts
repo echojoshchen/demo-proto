@@ -6,10 +6,10 @@ import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from '@grpc/proto-loader';
 
 import { ProtoGrpcType } from "../api/proto-loader/demo";
-import { DemoApiHandlers } from "../api/proto-loader/DemoApi";
-import { DemoContainer } from "../api/proto-loader/DemoContainer";
-import { DemoObject } from "../api/proto-loader/DemoObject";
-import { MyType } from "../api/proto-loader/MyType";
+import { DemoApiHandlers } from "../api/proto-loader/org/demo/DemoApi";
+import { DemoContainer } from "../api/proto-loader/org/demo/DemoContainer";
+import { DemoObject } from "../api/proto-loader/org/demo/DemoObject";
+import { MyType } from "../api/proto-loader/org/demo/MyType";
 import * as demoPb from "../api/grpcjs/demo_pb";
 import * as demoGrpcPb from "../api/grpcjs/demo_grpc_pb";
 import { DbEntry } from "../interfaces/database";
@@ -69,7 +69,7 @@ const packageObject = (grpc.loadPackageDefinition(
 export default async function initServer(port: number): Promise<any> {
     return new Promise((resolve, reject) => {
         const demoService =
-            packageObject.DemoApi.service;
+            packageObject.org.demo.DemoApi.service;
 
         // This wraps the instance of gRPC server with the Server Reflection service and returns it.
         const server = wrapServerWithReflection(new grpc.Server());

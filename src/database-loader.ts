@@ -2,11 +2,17 @@
  * Demo of writing and reading objects from a database with proto-loader-gen-types.
  */
 
-import { DemoContainer } from "../api/proto-loader/DemoContainer";
-import { DemoObject } from "../api/proto-loader/DemoObject";
-import { Info } from "../api/proto-loader/Info";
-import { MyType } from "../api/proto-loader/MyType";
+import { DemoContainer } from "../api/proto-loader/org/demo/DemoContainer";
+import { DemoObject } from "../api/proto-loader/org/demo/DemoObject";
+import { Info } from "../api/proto-loader/org/demo/Info";
+import { MyType } from "../api/proto-loader/org/demo/MyType";
 import { DbEntry } from "../interfaces/database";
+
+// Add reverse mappings for enums
+Object.entries(MyType).forEach(([key, value]) => {
+    // @ts-ignore
+    MyType[value] = key;
+})
 
 function serializeDbFormat(data: DemoObject): DbEntry {
     return {
@@ -61,6 +67,9 @@ const MyTypeToString: Record<MyType, string | undefined> = {
     [MyType.DEFAULT]: undefined,
     [MyType.DISABLED]: "Disabled",
     [MyType.ENABLED]: "Enabled",
+    DEFAULT: undefined,
+    DISABLED: "Disabled",
+    ENABLED: "Enabled",
 };
 readData.forEach((obj, index) => {
     console.log("Object:", index);

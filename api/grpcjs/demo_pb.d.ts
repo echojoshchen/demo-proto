@@ -1,4 +1,4 @@
-// package: 
+// package: org.demo
 // file: demo.proto
 
 /* tslint:disable */

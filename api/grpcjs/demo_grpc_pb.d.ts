@@ -1,4 +1,4 @@
-// package: 
+// package: org.demo
 // file: demo.proto
 
 /* tslint:disable */
@@ -12,7 +12,7 @@ interface IDemoApiService extends grpc.ServiceDefinition<grpc.UntypedServiceImpl
 }
 
 interface IDemoApiService_IDoSomething extends grpc.MethodDefinition<demo_pb.DemoContainer, demo_pb.DemoContainer> {
-    path: "/DemoApi/DoSomething";
+    path: "/org.demo.DemoApi/DoSomething";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<demo_pb.DemoContainer>;
