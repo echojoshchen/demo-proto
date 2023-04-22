@@ -277,7 +277,8 @@ proto.DemoObject.toObject = function(includeInstance, msg) {
     info: (f = msg.getInfo()) && proto.Info.toObject(includeInstance, f),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     type: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    count: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    count: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    longFieldName: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -330,6 +331,10 @@ proto.DemoObject.deserializeBinaryFromReader = function(msg, reader) {
     case 4:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setCount(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLongFieldName(value);
       break;
     default:
       reader.skipField();
@@ -386,6 +391,13 @@ proto.DemoObject.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeInt32(
       4,
+      f
+    );
+  }
+  f = message.getLongFieldName();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
       f
     );
   }
@@ -480,6 +492,24 @@ proto.DemoObject.prototype.getCount = function() {
  */
 proto.DemoObject.prototype.setCount = function(value) {
   return jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional string long_field_name = 5;
+ * @return {string}
+ */
+proto.DemoObject.prototype.getLongFieldName = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.DemoObject} returns this
+ */
+proto.DemoObject.prototype.setLongFieldName = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 

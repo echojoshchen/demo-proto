@@ -103,6 +103,9 @@ export interface IDemoObject {
 
     /** DemoObject count */
     count?: (number|null);
+
+    /** DemoObject longFieldName */
+    longFieldName?: (string|null);
 }
 
 /** Represents a DemoObject. */
@@ -125,6 +128,9 @@ export class DemoObject implements IDemoObject {
 
     /** DemoObject count. */
     public count: number;
+
+    /** DemoObject longFieldName. */
+    public longFieldName: string;
 
     /**
      * Creates a new DemoObject instance using the specified properties.

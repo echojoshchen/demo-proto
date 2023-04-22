@@ -227,6 +227,7 @@ $root.DemoObject = (function() {
      * @property {string|null} [name] DemoObject name
      * @property {MyType|null} [type] DemoObject type
      * @property {number|null} [count] DemoObject count
+     * @property {string|null} [longFieldName] DemoObject longFieldName
      */
 
     /**
@@ -277,6 +278,14 @@ $root.DemoObject = (function() {
     DemoObject.prototype.count = 0;
 
     /**
+     * DemoObject longFieldName.
+     * @member {string} longFieldName
+     * @memberof DemoObject
+     * @instance
+     */
+    DemoObject.prototype.longFieldName = "";
+
+    /**
      * Creates a new DemoObject instance using the specified properties.
      * @function create
      * @memberof DemoObject
@@ -308,6 +317,8 @@ $root.DemoObject = (function() {
             writer.uint32(/* id 3, wireType 0 =*/24).int32(message.type);
         if (message.count != null && Object.hasOwnProperty.call(message, "count"))
             writer.uint32(/* id 4, wireType 0 =*/32).int32(message.count);
+        if (message.longFieldName != null && Object.hasOwnProperty.call(message, "longFieldName"))
+            writer.uint32(/* id 5, wireType 2 =*/42).string(message.longFieldName);
         return writer;
     };
 
@@ -353,6 +364,9 @@ $root.DemoObject = (function() {
                 break;
             case 4:
                 message.count = reader.int32();
+                break;
+            case 5:
+                message.longFieldName = reader.string();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -409,6 +423,9 @@ $root.DemoObject = (function() {
         if (message.count != null && message.hasOwnProperty("count"))
             if (!$util.isInteger(message.count))
                 return "count: integer expected";
+        if (message.longFieldName != null && message.hasOwnProperty("longFieldName"))
+            if (!$util.isString(message.longFieldName))
+                return "longFieldName: string expected";
         return null;
     };
 
@@ -447,6 +464,8 @@ $root.DemoObject = (function() {
         }
         if (object.count != null)
             message.count = object.count | 0;
+        if (object.longFieldName != null)
+            message.longFieldName = String(object.longFieldName);
         return message;
     };
 
@@ -468,6 +487,7 @@ $root.DemoObject = (function() {
             object.name = "";
             object.type = options.enums === String ? "DEFAULT" : 0;
             object.count = 0;
+            object.longFieldName = "";
         }
         if (message.info != null && message.hasOwnProperty("info"))
             object.info = $root.Info.toObject(message.info, options);
@@ -477,6 +497,8 @@ $root.DemoObject = (function() {
             object.type = options.enums === String ? $root.MyType[message.type] : message.type;
         if (message.count != null && message.hasOwnProperty("count"))
             object.count = message.count;
+        if (message.longFieldName != null && message.hasOwnProperty("longFieldName"))
+            object.longFieldName = message.longFieldName;
         return object;
     };
 
