@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "lib": ["es2020"],
+        "target": "es2020",
+
+        "module": "es2020",
+        "moduleResolution": "bundler",
+        "declaration": true,
+        "removeComments": true,
+
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "sourceMap": true,
+
+        "allowJs": true,
+        "outDir": "dist"
+    },
+    "include": [
+        "src/**/*",
+        "api/**/*"
+    ]
+}

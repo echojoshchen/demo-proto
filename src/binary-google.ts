@@ -3,9 +3,12 @@
  */
 
 // Import contains "google-protobuf", which uses eval()
-import {
-    DemoContainer, DemoObject, Info, MyType
-} from "../api/grpcjs/demo_pb";
+import demopb from "../api/grpcjs/demo_pb";
+
+import DemoContainer = demopb.DemoContainer;
+import DemoObject = demopb.DemoObject;
+import Info = demopb.Info;
+import MyType = demopb.MyType;
 
 // Add reverse mappings for enums
 Object.entries(MyType).forEach(([key, value]) => {
