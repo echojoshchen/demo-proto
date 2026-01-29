@@ -1,4 +1,4 @@
-// package: org.demo
+// package: org.demo.v1
 // file: demo.proto
 
 /* tslint:disable */
@@ -86,8 +86,54 @@ export namespace Info {
     }
 }
 
+export class DoSomethingRequest extends jspb.Message { 
+
+    hasContainer(): boolean;
+    clearContainer(): void;
+    getContainer(): DemoContainer | undefined;
+    setContainer(value?: DemoContainer): DoSomethingRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DoSomethingRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DoSomethingRequest): DoSomethingRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DoSomethingRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DoSomethingRequest;
+    static deserializeBinaryFromReader(message: DoSomethingRequest, reader: jspb.BinaryReader): DoSomethingRequest;
+}
+
+export namespace DoSomethingRequest {
+    export type AsObject = {
+        container?: DemoContainer.AsObject,
+    }
+}
+
+export class DoSomethingResponse extends jspb.Message { 
+
+    hasContainer(): boolean;
+    clearContainer(): void;
+    getContainer(): DemoContainer | undefined;
+    setContainer(value?: DemoContainer): DoSomethingResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DoSomethingResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: DoSomethingResponse): DoSomethingResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DoSomethingResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DoSomethingResponse;
+    static deserializeBinaryFromReader(message: DoSomethingResponse, reader: jspb.BinaryReader): DoSomethingResponse;
+}
+
+export namespace DoSomethingResponse {
+    export type AsObject = {
+        container?: DemoContainer.AsObject,
+    }
+}
+
 export enum MyType {
-    DEFAULT = 0,
-    ENABLED = 1,
-    DISABLED = 2,
+    MY_TYPE_UNSPECIFIED = 0,
+    MY_TYPE_ENABLED = 1,
+    MY_TYPE_DISABLED = 2,
 }

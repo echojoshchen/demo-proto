@@ -6,10 +6,10 @@ import * as grpc from "@grpc/grpc-js";
 import { createLightship } from 'lightship';
 
 import {
-    DemoContainer, DemoObject, Info, MyType
+    DemoContainer, DemoObject, Info, MyType, DoSomethingRequest, DoSomethingResponse
 } from "../api/grpcjs/demo_pb";
 import {
-    DemoApiClient, DemoApiService, IDemoApiServer
+    DemoApiServiceClient, DemoApiServiceService, IDemoApiServiceServer
 } from "../api/grpcjs/demo_grpc_pb";
 import { DbEntry } from "../interfaces/database";
 
@@ -41,15 +41,15 @@ function deserializeDbFormat(data: DbEntry): DemoObject {
     return demoObj;
 }
 
-class DemoApiImpl implements IDemoApiServer {
+class DemoApiImpl implements IDemoApiServiceServer {
     [name: string]: grpc.UntypedHandleCall;
 
-    async doSomething(call: grpc.ServerUnaryCall<DemoContainer, DemoContainer>,
-        callback: grpc.sendUnaryData<DemoContainer>): Promise<void> {
-        const container = call.request;
+    async doSomething(call: grpc.ServerUnaryCall<DoSomethingRequest, DoSomethingResponse>,
+        callback: grpc.sendUnaryData<DoSomethingResponse>): Promise<void> {
+        const container = call.request.getContainer() || new DemoContainer();
         // Write to database
         const mockDb: {[key: string]: DbEntry} = {};
-        container.getObjectsList().forEach((obj) => {
+        container.getObjectsList().forEach((obj: DemoObject) => {
             mockDb[obj.getInfo()?.getId() || ""] = serializeDbFormat(obj);
         })
 
@@ -58,7 +58,9 @@ class DemoApiImpl implements IDemoApiServer {
         readData.setObjectsList(
             Object.values(mockDb).map((data: unknown) => deserializeDbFormat(data as DbEntry))
         );
-        callback(null, readData);
+        const response = new DoSomethingResponse();
+        response.setContainer(readData);
+        callback(null, response);
     }
 }
 
@@ -66,7 +68,7 @@ export default async function initServer(port: number): Promise<any> {
     return new Promise((resolve, reject) => {
         const server = new grpc.Server();
 
-        server.addService(DemoApiService, new DemoApiImpl());
+        server.addService(DemoApiServiceService, new DemoApiImpl());
         server.bindAsync(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure(), (err, listenPort) => {
             if (err) {
                 reject(err);
@@ -86,23 +88,29 @@ initServer(9876).then(async (server: grpc.Server) => {
     const demoObj = new DemoObject()
     demoObj.setInfo(info);
     demoObj.setName("Test Object");
-    demoObj.setType(MyType.ENABLED);
+    demoObj.setType(MyType.MY_TYPE_ENABLED);
     demoObj.setCount(100);
     const container = new DemoContainer();
     container.setObjectsList([demoObj]);
 
-    const client = new DemoApiClient("localhost:9876", grpc.credentials.createInsecure());
+    const client = new DemoApiServiceClient("localhost:9876", grpc.credentials.createInsecure());
     const readData = await new Promise<DemoContainer>((resolve) => {
-        client.doSomething(container, (err, response) => {
-            resolve(response)
+        const request = new DoSomethingRequest();
+        request.setContainer(container);
+        client.doSomething(request, (err, response) => {
+            if (response && response.hasContainer()) {
+                resolve(response.getContainer()!)
+            } else {
+                resolve(new DemoContainer())
+            }
         });
     });
 
     // Human readable strings
     const MyTypeToString: Record<MyType, string | undefined> = {
-        [MyType.DEFAULT]: undefined,
-        [MyType.DISABLED]: "Disabled",
-        [MyType.ENABLED]: "Enabled",
+        [MyType.MY_TYPE_UNSPECIFIED]: undefined,
+        [MyType.MY_TYPE_DISABLED]: "Disabled",
+        [MyType.MY_TYPE_ENABLED]: "Enabled",
     };
     readData.getObjectsList().forEach((obj, index) => {
         console.log("Object:", index);

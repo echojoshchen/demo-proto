@@ -23,7 +23,7 @@ info.setTime(Date.now());
 const demoObj = new DemoObject()
 demoObj.setInfo(info);
 demoObj.setName("Test Object");
-demoObj.setType(MyType.ENABLED);
+demoObj.setType(MyType.MY_TYPE_ENABLED);
 demoObj.setCount(100);
 const container = new DemoContainer();
 container.setObjectsList([demoObj]);

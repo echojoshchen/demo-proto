@@ -43,7 +43,7 @@ info.setTime(Date.now());
 const demoObj = new DemoObject()
 demoObj.setInfo(info);
 demoObj.setName("Test Object");
-demoObj.setType(MyType.ENABLED);
+demoObj.setType(MyType.MY_TYPE_ENABLED);
 demoObj.setCount(100);
 const container = new DemoContainer();
 container.setObjectsList([demoObj]);
@@ -61,9 +61,9 @@ const readData = Object.values(mockDb).map((data: unknown) => deserializeDbForma
 
 // Human readable strings
 const MyTypeToString: Record<MyType, string | undefined> = {
-    [MyType.DEFAULT]: undefined,
-    [MyType.DISABLED]: "Disabled",
-    [MyType.ENABLED]: "Enabled",
+    [MyType.MY_TYPE_UNSPECIFIED]: undefined,
+    [MyType.MY_TYPE_DISABLED]: "Disabled",
+    [MyType.MY_TYPE_ENABLED]: "Enabled",
 };
 readData.forEach((obj, index) => {
     console.log("Object:", index);

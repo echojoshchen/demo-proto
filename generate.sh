@@ -30,3 +30,8 @@ proto-loader-gen-types \
     --grpcLib=@grpc/grpc-js \
     --outDir=${PROTO_DEST} \
     proto/demo.proto
+
+# buf
+PROTO_DEST=./api/buf
+mkdir -p $PROTO_DEST
+npx buf generate

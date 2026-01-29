@@ -12,7 +12,7 @@ Object.entries(MyType).forEach(([key, value]) => {
 })
 
 // Single enum to string and back
-let val = MyType.ENABLED;
+let val = MyType.MY_TYPE_ENABLED;
 const valString = MyType[val];
 val = (MyType as any)[valString];
 
@@ -22,9 +22,9 @@ console.log("Enum as list of strings", stringList);
 
 // Enum to human readable string
 const MyTypeToString: Record<MyType, string | undefined> = {
-    [MyType.DEFAULT]: undefined,
-    [MyType.DISABLED]: "Disabled",
-    [MyType.ENABLED]: "Enabled",
+    [MyType.MY_TYPE_UNSPECIFIED]: undefined,
+    [MyType.MY_TYPE_DISABLED]: "Disabled",
+    [MyType.MY_TYPE_ENABLED]: "Enabled",
 };
 const humanString = MyTypeToString[val];
 console.log("Human string", humanString)

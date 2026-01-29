@@ -4,42 +4,42 @@
 
 import { org } from "../api/pbjs/demo";
 import { DbEntry } from "../interfaces/database";
-type IDemoObject = org.demo.IDemoObject;
+type IDemoObject = org.demo.v1.IDemoObject;
 
 function serializeDbFormat(data: IDemoObject): DbEntry {
     return {
         infoId: data.info?.id || "",
         infoTime: Number(data.info?.time),
         name: data.name || "",
-        type: org.demo.MyType[data.type || 0],
+        type: org.demo.v1.MyType[data.type || 0],
         count: data.count || 0,
     }
 }
 
-function deserializeDbFormat(data: DbEntry): org.demo.DemoObject {
-    return org.demo.DemoObject.fromObject({
+function deserializeDbFormat(data: DbEntry): org.demo.v1.DemoObject {
+    return org.demo.v1.DemoObject.fromObject({
         info: {
             id: data.infoId,
             time: data.infoTime,
         },
         name: data.name,
-        type: (org.demo.MyType as any)[data.type] as org.demo.MyType,
+        type: (org.demo.v1.MyType as any)[data.type] as org.demo.v1.MyType,
         count: data.count,
     });
 }
 
 // Set data fields
-const info = org.demo.Info.fromObject({
+const info = org.demo.v1.Info.fromObject({
     id: "1234",
     time: Date.now(),
 });
-const demoObj = org.demo.DemoObject.fromObject({
+const demoObj = org.demo.v1.DemoObject.fromObject({
     info,
     name: "Test Object",
-    type: org.demo.MyType.ENABLED,
+    type: org.demo.v1.MyType.MY_TYPE_ENABLED,
     count: 100,
 });
-const container = org.demo.DemoContainer.fromObject({
+const container = org.demo.v1.DemoContainer.fromObject({
     objects: [demoObj],
 });
 
@@ -55,10 +55,10 @@ const readData = Object.values(mockDb).map((data: unknown) => deserializeDbForma
 // Present to user
 
 // Human readable strings
-const MyTypeToString: Record<org.demo.MyType, string | undefined> = {
-    [org.demo.MyType.DEFAULT]: undefined,
-    [org.demo.MyType.DISABLED]: "Disabled",
-    [org.demo.MyType.ENABLED]: "Enabled",
+const MyTypeToString: Record<org.demo.v1.MyType, string | undefined> = {
+    [org.demo.v1.MyType.MY_TYPE_UNSPECIFIED]: undefined,
+    [org.demo.v1.MyType.MY_TYPE_DISABLED]: "Disabled",
+    [org.demo.v1.MyType.MY_TYPE_ENABLED]: "Enabled",
 };
 readData.forEach((obj, index) => {
     console.log("Object:", index);

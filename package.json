@@ -8,6 +8,7 @@
     "proto": "sh generate.sh",
     "build": "tsc",
     "binary:google": "npm run build && node dist/src/binary-google.js",
+    "binary:buf": "npm run build && node dist/src/binary-buf.js",
     "binary:pbjs": "npm run build && node dist/src/binary-pbjs.js",
     "enum:ts": "npm run build && node dist/src/enum-ts.js",
     "enum:google": "npm run build && node dist/src/enum-google.js",
@@ -22,7 +23,9 @@
     "server:google-persistent": "npm run build && node dist/src/server-google.js",
     "server:loader-google": "npm run build && node dist/src/server-loader-google.js",
     "server:loader": "SHUTDOWN=1 npm run build && node dist/src/server-loader.js",
-    "server:loader-persistent": "npm run build && node dist/src/server-loader.js"
+    "server:loader-persistent": "npm run build && node dist/src/server-loader.js",
+    "server:connect": "npm run build && node dist/src/server-connect.js",
+    "client:connect": "npm run build && node dist/src/client-connect.js"
   },
   "author": "",
   "license": "ISC",
@@ -35,9 +38,16 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@bufbuild/buf": "^1.64.0",
+    "@bufbuild/protobuf": "^2.11.0",
+    "@bufbuild/protoc-gen-es": "^2.11.0",
+    "@connectrpc/connect": "^2.1.1",
+    "@connectrpc/connect-fastify": "^2.1.1",
+    "@connectrpc/validate": "^0.2.0",
     "@grpc/grpc-js": "^1.9.9",
     "@grpc/proto-loader": "^0.7.10",
     "express": "^4.18.2",
+    "fastify": "^5.7.2",
     "google-protobuf": "^3.21.2",
     "got": "^13.0.0",
     "grpc-node-server-reflection": "^1.0.2",

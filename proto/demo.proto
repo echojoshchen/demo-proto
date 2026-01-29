@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package org.demo;
+package org.demo.v1;
 
 message DemoContainer {
     repeated DemoObject objects = 1;
@@ -20,11 +20,19 @@ message Info {
 }
 
 enum MyType {
-    DEFAULT = 0;
-    ENABLED = 1;
-    DISABLED = 2;
+    MY_TYPE_UNSPECIFIED = 0;
+    MY_TYPE_ENABLED = 1;
+    MY_TYPE_DISABLED = 2;
 }
 
-service DemoApi {
-    rpc DoSomething(DemoContainer) returns (DemoContainer) {};
+service DemoApiService {
+    rpc DoSomething(DoSomethingRequest) returns (DoSomethingResponse) {};
+}
+
+message DoSomethingRequest {
+    DemoContainer container = 1;
+}
+
+message DoSomethingResponse {
+    DemoContainer container = 1;
 }
