@@ -2,7 +2,7 @@
 
 'use strict';
 var grpc = require('@grpc/grpc-js');
-var demo_pb = require('./demo_pb.cjs');
+var demo_pb = require('./demo_pb.js');
 
 function serialize_org_demo_v1_DoSomethingRequest(arg) {
   if (!(arg instanceof demo_pb.DoSomethingRequest)) {

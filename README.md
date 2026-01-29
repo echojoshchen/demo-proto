@@ -51,7 +51,7 @@ that closes the server and use grpcui:
 ```bash
 go get github.com/fullstorydev/grpcui/...
 go install github.com/fullstorydev/grpcui/cmd/grpcui
-grpcui -plaintext localhost:9876
+grpcui -plaintext localhost:3000
 ```
 
 ## References
