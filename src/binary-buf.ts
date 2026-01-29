@@ -8,8 +8,7 @@ import {
     DemoObjectSchema,
     InfoSchema,
     MyType,
-    type DemoContainer
-} from "../api/buf/demo_pb";
+} from "../api/buf/demo_pb.js";
 
 // Set data fields
 const info = create(InfoSchema, {

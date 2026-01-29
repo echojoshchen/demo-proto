@@ -1,7 +1,7 @@
 import { createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-node";
 import { create } from "@bufbuild/protobuf";
-import { DemoApiService, DemoContainerSchema, DemoObjectSchema, InfoSchema, MyType } from "../api/buf/demo_pb";
+import { DemoApiService, DemoContainerSchema, DemoObjectSchema, InfoSchema, MyType } from "../api/buf/demo_pb.js";
 
 // Create a transport
 const transport = createConnectTransport({

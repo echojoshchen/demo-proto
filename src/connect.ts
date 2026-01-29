@@ -1,5 +1,5 @@
 import type { ConnectRouter } from "@connectrpc/connect";
-import { DemoApiService, DoSomethingRequest } from "../api/buf/demo_pb";
+import { DemoApiService, DoSomethingRequest } from "../api/buf/demo_pb.js";
 
 export default (router: ConnectRouter) => {
   // registers org.demo.v1.DemoApiService

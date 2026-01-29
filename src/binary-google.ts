@@ -3,7 +3,7 @@
  */
 
 // Import contains "google-protobuf", which uses eval()
-import demopb from "../api/grpcjs/demo_pb";
+import demopb from "../api/grpcjs/demo_pb.js";
 
 import DemoContainer = demopb.DemoContainer;
 import DemoObject = demopb.DemoObject;
