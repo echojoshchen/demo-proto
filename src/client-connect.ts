@@ -5,8 +5,8 @@ import { DemoApiService, DemoContainerSchema, DemoObjectSchema, InfoSchema, MyTy
 
 // Create a transport
 const transport = createConnectTransport({
-  baseUrl: "http://localhost:3000",
-  httpVersion: "1.1",
+  baseUrl: "http://localhost:5001",
+  httpVersion: "2",
 });
 
 // Create a client

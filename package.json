@@ -1,6 +1,5 @@
 {
   "name": "demo-proto",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "demo.js",
@@ -11,7 +10,8 @@
     "enum:buf": "npm run build && node dist/src/enum-buf.js",
     "database:buf": "npm run build && node dist/src/database-buf.js",
     "server:connect": "npm run build && node dist/src/server-connect.js",
-    "client:connect": "npm run build && node dist/src/client-connect.js"
+    "client:connect": "npm run build && node dist/src/client-connect.js",
+    "client:google": "npm run build && node dist/src/client-google.js"
   },
   "author": "",
   "license": "ISC",
