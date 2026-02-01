@@ -43,15 +43,22 @@ npm run server:google;
 npm run server:loader;
 ```
 
+## grpcurl
+
+```sh
+grpcurl -plaintext -proto proto/demo.proto \
+  -d '{"container": {"objects": [{"info": {"id": "1234"}, "name": "Test", "type": "MY_TYPE_ENABLED", "count": 100}]}}' \
+  localhost:5001 org.demo.v1.DemoApiService/DoSomething
+```
+
 ## Reflection
 
 The `server:loader` version implements server reflection. One way to use this is to remove the line
 that closes the server and use grpcui:
 
 ```bash
-go get github.com/fullstorydev/grpcui/...
 go install github.com/fullstorydev/grpcui/cmd/grpcui
-grpcui -plaintext localhost:3000
+grpcui -plaintext localhost:5001
 ```
 
 ## References
