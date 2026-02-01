@@ -1,125 +1,30 @@
-import { createServer } from "http2";
-import { DoSomethingRequest, DoSomethingResponse, DoSomethingRequestSchema, DoSomethingResponseSchema } from "../api/buf/demo_pb.js";
-import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
+import http2 from "http2";
+import { connectNodeAdapter } from "@connectrpc/connect-node";
+import { ConnectRouter } from "@connectrpc/connect";
+import { DemoApiService } from "../api/buf/demo_pb.js";
+
+// Define routes
+const routes = (router: ConnectRouter) => {
+  router.service(DemoApiService, {
+    async doSomething(req) {
+      // Process the container and return it
+      return { container: req.container };
+    },
+  });
+};
 
 async function main() {
   console.log('Creating HTTP/2 server...');
   
-  // Create HTTP/2 server
-  const server = createServer();
+  // Create HTTP/2 server with Connect adapter
+  const server = http2.createServer(
+    connectNodeAdapter({ routes })
+  );
   
-  // Handle HTTP/2 streams
-  server.on('stream', (stream, headers) => {
-    const path = headers[':path'] as string;
-    const method = headers[':method'] as string;
-    
-    // Handle DoSomething RPC
-    if (method === 'POST' && path === '/org.demo.v1.DemoApiService/DoSomething') {
-      const chunks: Buffer[] = [];
-      
-      stream.on('data', (chunk) => {
-        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-      });
-      
-      stream.on('end', async () => {
-        try {
-          const data = Buffer.concat(chunks);
-          
-          // Parse gRPC message framing
-          // gRPC message format: [1-byte compression][4-byte length][message]
-          if (data.length < 5) {
-            throw new Error('Invalid gRPC message: too short');
-          }
-          
-          const compressionFlag = data.readUInt8(0);
-          const messageLength = data.readUInt32BE(1);
-          
-          if (data.length < 5 + messageLength) {
-            throw new Error(`Invalid gRPC message: expected ${5 + messageLength} bytes, got ${data.length}`);
-          }
-          
-          const messageData = data.slice(5, 5 + messageLength);
-          
-          // Parse and handle the request
-          const request = fromBinary(DoSomethingRequestSchema, messageData);
-          
-          // Create response
-          const response = create(DoSomethingResponseSchema, { container: request.container });
-          const responseData = Buffer.from(toBinary(DoSomethingResponseSchema, response));
-          
-          // Write gRPC response with proper framing
-          // gRPC message format: [1-byte compression][4-byte length][message]
-          const responseFrame = Buffer.alloc(5 + responseData.length);
-          responseFrame.writeUInt8(0, 0); // Compression flag: 0 = uncompressed
-          responseFrame.writeUInt32BE(responseData.length, 1); // Message length
-          responseData.copy(responseFrame, 5); // Message data
-          
-          // Send response headers with waitForTrailers option
-          stream.respond({
-            ':status': 200,
-            'content-type': 'application/grpc+proto',
-          }, { waitForTrailers: true });
-          
-          // Write response and wait for it to drain
-          const writeResult = stream.write(responseFrame);
-          
-          if (!writeResult) {
-            await new Promise<void>((resolve) => stream.once('drain', resolve));
-          }
-          
-          // Now end the stream - this will trigger wantTrailers
-          stream.end();
-          
-          // Set up trailer handling
-          const trailers = {
-            'grpc-status': '0', // 0 = OK
-            'grpc-message': '',
-          };
-          
-          // Wait for wantTrailers event
-          await new Promise<void>((resolve) => {
-            stream.once('wantTrailers', () => {
-              stream.sendTrailers(trailers);
-              resolve();
-            });
-          });
-        } catch (err) {
-          // Send error response
-          if (!stream.destroyed) {
-            stream.respond({ ':status': 500 });
-            const errorTrailers = {
-              'grpc-status': '2', // 2 = Unknown
-              'grpc-message': err instanceof Error ? err.message : 'Unknown error',
-            };
-            stream.sendTrailers(errorTrailers);
-          }
-        }
-      });
-      
-      stream.on('error', (err) => {
-        // Stream errors are logged at server level
-      });
-    } else {
-      // Unknown path
-      stream.respond({ ':status': 404 });
-      stream.end();
-    }
-  });
-  
-  // Handle server errors
-  server.on('error', (err) => {
-    console.error('Server error:', err);
-  });
-  
-  try {
-    server.listen(5001);
-    console.log(`\nHTTP/2 server started successfully!`);
-    console.log(`- gRPC: grpcurl --http2-prior-knowledge -plaintext localhost:5001`);
-    console.log(`- Example: grpcurl --http2-prior-knowledge -plaintext -proto proto/demo.proto -d '{"container": {"objects": [{"info": {"id": "1234"}, "name": "Test", "type": "MY_TYPE_ENABLED", "count": 100}]}}' localhost:5001 org.demo.v1.DemoApiService/DoSomething`);
-  } catch (err) {
-    console.error('Failed to start server:', err);
-    process.exit(1);
-  }
+  server.listen(5001);
+  console.log(`\nHTTP/2 server started successfully!`);
+  console.log(`- gRPC: grpcurl -plaintext localhost:5001`);
+  console.log(`- Example: grpcurl -plaintext -proto proto/demo.proto -d '{"container": {"objects": [{"info": {"id": "1234"}, "name": "Test", "type": "MY_TYPE_ENABLED", "count": 100}]}}' localhost:5001 org.demo.v1.DemoApiService/DoSomething`);
 }
 
 main().catch(console.error);
