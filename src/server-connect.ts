@@ -9,15 +9,11 @@ const routes = (router: ConnectRouter) => {
   router.service(DemoApiService, {
     // implements rpc DoSomething
     async doSomething(req: DoSomethingRequest) {
-      console.log(`[${new Date().toISOString()}] Processing DoSomething request`);
-      console.log(`Request container has ${req.container?.objects?.length || 0} objects`);
-      
       // Process the container and return it
       const container = req.container;
       
       // Example processing: you can modify the container here
       // For now, just return it as-is
-      console.log(`[${new Date().toISOString()}] Sending response`);
       return { container };
     },
   });
@@ -28,8 +24,6 @@ async function handleDoSomethingRequest(data: Buffer): Promise<Buffer> {
   try {
     // Parse the request
     const request = fromBinary(DoSomethingRequestSchema, data);
-    console.log(`[${new Date().toISOString()}] Processing DoSomething request`);
-    console.log(`Request container has ${request.container?.objects?.length || 0} objects`);
     
     // Process the container and return it
     const container = request.container;
@@ -38,16 +32,14 @@ async function handleDoSomethingRequest(data: Buffer): Promise<Buffer> {
     const response = create(DoSomethingResponseSchema, { container });
     
     // Serialize response and convert to Buffer
-    console.log(`[${new Date().toISOString()}] Sending response`);
     return Buffer.from(toBinary(DoSomethingResponseSchema, response));
   } catch (err) {
-    console.error(`[${new Date().toISOString()}] Error handling request:`, err);
     throw err;
   }
 }
 
 async function main() {
-  console.log(`[${new Date().toISOString()}] Creating HTTP/2 server...`);
+  console.log('Creating HTTP/2 server...');
   
   // Create HTTP/2 server
   const server = createServer();
@@ -57,28 +49,9 @@ async function main() {
     const path = headers[':path'] as string;
     const method = headers[':method'] as string;
     
-    console.log(`[${new Date().toISOString()}] HTTP/2 stream:`, {
-      method,
-      path,
-      contentType: headers['content-type'],
-    });
-    
     // Handle DoSomething RPC
     if (method === 'POST' && path === '/org.demo.v1.DemoApiService/DoSomething') {
       const chunks: Buffer[] = [];
-      
-      // Debug events
-      stream.on('close', () => {
-        console.log(`[${new Date().toISOString()}] Stream closed`);
-      });
-      
-      stream.on('finish', () => {
-        console.log(`[${new Date().toISOString()}] Stream finished`);
-      });
-      
-      stream.on('drain', () => {
-        console.log(`[${new Date().toISOString()}] Stream drained`);
-      });
       
       stream.on('data', (chunk) => {
         chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
@@ -87,7 +60,6 @@ async function main() {
       stream.on('end', async () => {
         try {
           const data = Buffer.concat(chunks);
-          console.log(`[${new Date().toISOString()}] Received ${data.length} bytes of data`);
           
           // Parse gRPC message framing
           // gRPC message format: [1-byte compression][4-byte length][message]
@@ -104,12 +76,8 @@ async function main() {
           
           const messageData = data.slice(5, 5 + messageLength);
           
-          console.log(`[${new Date().toISOString()}] gRPC frame: compression=${compressionFlag}, length=${messageLength}`);
-          
           // Parse and handle the request
           const request = fromBinary(DoSomethingRequestSchema, messageData);
-          console.log(`[${new Date().toISOString()}] Processing DoSomething request`);
-          console.log(`Request container has ${request.container?.objects?.length || 0} objects`);
           
           // Create response
           const response = create(DoSomethingResponseSchema, { container: request.container });
@@ -130,7 +98,6 @@ async function main() {
           
           // Write response and wait for it to drain
           const writeResult = stream.write(responseFrame);
-          console.log(`[${new Date().toISOString()}] Response data written, drain needed: ${!writeResult}`);
           
           if (!writeResult) {
             await new Promise<void>((resolve) => stream.once('drain', resolve));
@@ -138,7 +105,6 @@ async function main() {
           
           // Now end the stream - this will trigger wantTrailers
           stream.end();
-          console.log(`[${new Date().toISOString()}] Stream ended`);
           
           // Set up trailer handling
           const trailers = {
@@ -149,16 +115,11 @@ async function main() {
           // Wait for wantTrailers event
           await new Promise<void>((resolve) => {
             stream.once('wantTrailers', () => {
-              console.log(`[${new Date().toISOString()}] Sending gRPC trailers:`, trailers);
               stream.sendTrailers(trailers);
               resolve();
             });
           });
-          
-          console.log(`[${new Date().toISOString()}] Response completed successfully`);
         } catch (err) {
-          console.error(`[${new Date().toISOString()}] Error:`, err);
-          
           // Send error response
           if (!stream.destroyed) {
             stream.respond({ ':status': 500 });
@@ -172,7 +133,7 @@ async function main() {
       });
       
       stream.on('error', (err) => {
-        console.error(`[${new Date().toISOString()}] Stream error:`, err);
+        // Stream errors are logged at server level
       });
     } else {
       // Unknown path
@@ -183,16 +144,16 @@ async function main() {
   
   // Handle server errors
   server.on('error', (err) => {
-    console.error(`[${new Date().toISOString()}] Server error:`, err);
+    console.error('Server error:', err);
   });
   
   try {
     server.listen(5001);
-    console.log(`\n[${new Date().toISOString()}] HTTP/2 server started successfully!`);
+    console.log(`\nHTTP/2 server started successfully!`);
     console.log(`- gRPC: grpcurl --http2-prior-knowledge -plaintext localhost:5001`);
     console.log(`- Example: grpcurl --http2-prior-knowledge -plaintext -proto proto/demo.proto -d '{"container": {"objects": [{"info": {"id": "1234"}, "name": "Test", "type": "MY_TYPE_ENABLED", "count": 100}]}}' localhost:5001 org.demo.v1.DemoApiService/DoSomething`);
   } catch (err) {
-    console.error(`[${new Date().toISOString()}] Failed to start server:`, err);
+    console.error('Failed to start server:', err);
     process.exit(1);
   }
 }
