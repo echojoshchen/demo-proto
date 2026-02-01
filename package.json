@@ -18,6 +18,7 @@
     "database:pbjs": "npm run build && node dist/src/database-pbjs.js",
     "database:loader": "npm run build && node dist/src/database-loader.js",
     "server:ts": "npm run build && node dist/src/server-ts.js",
+    "server:pbjs-grpc": "SHUTDOWN=1 npm run build && node dist/src/server-pbjs-grpc.js",
     "server:google": "SHUTDOWN=1 npm run build && node dist/src/server-google.js",
     "server:google-persistent": "npm run build && node dist/src/server-google.js",
     "server:loader-google": "npm run build && node dist/src/server-loader-google.js",
