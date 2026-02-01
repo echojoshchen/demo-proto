@@ -1,42 +1,6 @@
-import { ConnectRouter } from "@connectrpc/connect";
 import { createServer } from "http2";
-import { DemoApiService, DoSomethingRequest, DoSomethingResponse, DoSomethingRequestSchema, DoSomethingResponseSchema } from "../api/buf/demo_pb.js";
+import { DoSomethingRequest, DoSomethingResponse, DoSomethingRequestSchema, DoSomethingResponseSchema } from "../api/buf/demo_pb.js";
 import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
-
-// Define routes inline
-const routes = (router: ConnectRouter) => {
-  // registers org.demo.v1.DemoApiService
-  router.service(DemoApiService, {
-    // implements rpc DoSomething
-    async doSomething(req: DoSomethingRequest) {
-      // Process the container and return it
-      const container = req.container;
-      
-      // Example processing: you can modify the container here
-      // For now, just return it as-is
-      return { container };
-    },
-  });
-};
-
-// Custom gRPC handler
-async function handleDoSomethingRequest(data: Buffer): Promise<Buffer> {
-  try {
-    // Parse the request
-    const request = fromBinary(DoSomethingRequestSchema, data);
-    
-    // Process the container and return it
-    const container = request.container;
-    
-    // Create response
-    const response = create(DoSomethingResponseSchema, { container });
-    
-    // Serialize response and convert to Buffer
-    return Buffer.from(toBinary(DoSomethingResponseSchema, response));
-  } catch (err) {
-    throw err;
-  }
-}
 
 async function main() {
   console.log('Creating HTTP/2 server...');
