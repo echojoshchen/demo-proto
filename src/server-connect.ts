@@ -87,9 +87,24 @@ async function main() {
       stream.on('end', async () => {
         try {
           const data = Buffer.concat(chunks);
+          console.log(`[${new Date().toISOString()}] Received ${data.length} bytes of data`);
           
-          // Skip gRPC message framing (5-byte header)
-          const messageData = data.slice(5);
+          // Parse gRPC message framing
+          // gRPC message format: [1-byte compression][4-byte length][message]
+          if (data.length < 5) {
+            throw new Error('Invalid gRPC message: too short');
+          }
+          
+          const compressionFlag = data.readUInt8(0);
+          const messageLength = data.readUInt32BE(1);
+          
+          if (data.length < 5 + messageLength) {
+            throw new Error(`Invalid gRPC message: expected ${5 + messageLength} bytes, got ${data.length}`);
+          }
+          
+          const messageData = data.slice(5, 5 + messageLength);
+          
+          console.log(`[${new Date().toISOString()}] gRPC frame: compression=${compressionFlag}, length=${messageLength}`);
           
           // Parse and handle the request
           const request = fromBinary(DoSomethingRequestSchema, messageData);
@@ -100,48 +115,59 @@ async function main() {
           const response = create(DoSomethingResponseSchema, { container: request.container });
           const responseData = Buffer.from(toBinary(DoSomethingResponseSchema, response));
           
-          // Write gRPC response with framing
+          // Write gRPC response with proper framing
+          // gRPC message format: [1-byte compression][4-byte length][message]
           const responseFrame = Buffer.alloc(5 + responseData.length);
-          responseFrame.writeUInt32BE(responseData.length, 1);
-          responseData.copy(responseFrame, 5);
+          responseFrame.writeUInt8(0, 0); // Compression flag: 0 = uncompressed
+          responseFrame.writeUInt32BE(responseData.length, 1); // Message length
+          responseData.copy(responseFrame, 5); // Message data
           
+          // Send response headers with waitForTrailers option
           stream.respond({
             ':status': 200,
             'content-type': 'application/grpc+proto',
-          });
+          }, { waitForTrailers: true });
+          
+          // Write response and wait for it to drain
+          const writeResult = stream.write(responseFrame);
+          console.log(`[${new Date().toISOString()}] Response data written, drain needed: ${!writeResult}`);
+          
+          if (!writeResult) {
+            await new Promise<void>((resolve) => stream.once('drain', resolve));
+          }
+          
+          // Now end the stream - this will trigger wantTrailers
+          stream.end();
+          console.log(`[${new Date().toISOString()}] Stream ended`);
           
           // Set up trailer handling
-          let trailersSent = false;
-          
-          const sendTrailers = () => {
-            if (!trailersSent && !stream.destroyed) {
-              trailersSent = true;
-              const trailers = {
-                'grpc-status': '0', // 0 = OK
-                'grpc-message': '',
-              };
-              
-              console.log(`[${new Date().toISOString()}] Sending gRPC trailers:`, trailers);
-              try {
-                stream.sendTrailers(trailers);
-              } catch (err) {
-                console.error(`[${new Date().toISOString()}] Error sending trailers:`, err);
-              }
-            }
+          const trailers = {
+            'grpc-status': '0', // 0 = OK
+            'grpc-message': '',
           };
           
-          // Listen for wantTrailers event - this is the proper time to send trailers
-          stream.once('wantTrailers', sendTrailers);
+          // Wait for wantTrailers event
+          await new Promise<void>((resolve) => {
+            stream.once('wantTrailers', () => {
+              console.log(`[${new Date().toISOString()}] Sending gRPC trailers:`, trailers);
+              stream.sendTrailers(trailers);
+              resolve();
+            });
+          });
           
-          stream.write(responseFrame);
-          console.log(`[${new Date().toISOString()}] Response data written, ending stream`);
-          
-          // End the stream - this will trigger wantTrailers if the client expects them
-          stream.end();
+          console.log(`[${new Date().toISOString()}] Response completed successfully`);
         } catch (err) {
           console.error(`[${new Date().toISOString()}] Error:`, err);
-          stream.respond({ ':status': 500 });
-          stream.end();
+          
+          // Send error response
+          if (!stream.destroyed) {
+            stream.respond({ ':status': 500 });
+            const errorTrailers = {
+              'grpc-status': '2', // 2 = Unknown
+              'grpc-message': err instanceof Error ? err.message : 'Unknown error',
+            };
+            stream.sendTrailers(errorTrailers);
+          }
         }
       });
       
